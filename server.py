@@ -22,5 +22,10 @@ def fried_liver():
 def traxler_counter():
     return render_template('traxler_counter.html')
 
+# 5) Quiz
+@app.route('/liver_quiz')
+def liver_quiz():
+    return render_template('liver_quiz.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

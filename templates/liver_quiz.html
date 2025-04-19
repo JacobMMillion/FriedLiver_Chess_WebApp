@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz: Fried‑Liver Trap</title>
+
+  <!-- jQuery -->
+  <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+    crossorigin="anonymous">
+  </script>
+  <!-- chess.js -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.12.1/chess.min.js"
+    integrity="sha512-rIescAjPgXHz3WaxrSjaOl5iZfvBVIehYe+EF+d+DAdFNgV10QBT8d5APBjcGFKES0iVUYjBilvpck7gOe7CLg=="
+    crossorigin="anonymous">
+  </script>
+  <!-- chessboard.js -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css"
+    crossorigin="anonymous" />
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"
+    crossorigin="anonymous">
+  </script>
+
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+    #board { width: 400px; margin: 20px auto; }
+    #status { margin-top: 10px; font-weight: bold; }
+    #feedback { margin-top: 10px; font-weight: bold; height: 1.2em; }
+  </style>
+</head>
+<body>
+  <h1>Quiz: Fried‑Liver Attack</h1>
+  <div id="board"></div>
+  <div id="status">Loading…</div>
+  <div id="feedback"></div>
+
+  <script>
+    $(function() {
+      if (typeof Chessboard === 'undefined' || typeof Chess === 'undefined') {
+        $('#status').text('Error loading libraries.');
+        return;
+      }
+
+      var game = new Chess();
+
+      // Expected White moves
+      var whiteSequence = ['e4', 'Nf3', 'Bc4', 'Ng5', 'exd5', 'Nxf7', 'Bxd5+'];
+      var whiteStep = 0;
+
+      // Track if a given step has already had a wrong attempt
+      var wrongAttempted = new Array(whiteSequence.length).fill(false);
+
+      // Black auto‑replies
+      var blackReplies = ['e5', 'Nc6', 'Nf6', 'd5', 'Nxd5', 'Kxf7'];
+      var blackStep = 0;
+
+      var score = 0;
+      var $feedback = $('#feedback');
+
+      var board = Chessboard('board', {
+        draggable: true,
+        position: 'start',
+        pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
+
+        onDragStart: function(source, piece) {
+          return !game.game_over() &&
+                 game.turn() === 'w' &&
+                 piece.charAt(0) === 'w';
+        },
+
+        onDrop: function(source, target) {
+          var move = game.move({ from: source, to: target, promotion: 'q' });
+          if (!move) return 'snapback';
+
+          // *** DEBUGGING ***
+          console.log('🔍 move.san:', move.san);
+          console.log('🔍 expected:', whiteSequence[whiteStep]);
+
+          // Only handle White’s moves here
+          if (move.color === 'w') {
+            var expected = whiteSequence[whiteStep];
+
+            // If wrong, mark that step dirty and snap back
+            if (move.san !== expected) {
+              wrongAttempted[whiteStep] = true;
+              $feedback.css('color', 'red').text('Not quite.');
+              game.undo();
+              board.position(game.fen(), false);
+              return;
+            }
+
+            // If correct and never wrong before, award point
+            var gained = !wrongAttempted[whiteStep];
+            if (gained) {
+              score++;
+              $feedback
+                .css('color', 'green')
+                .text('Good job! +1 point (Total: ' + score + ')');
+            } else {
+              $feedback
+                .css('color', 'orange')
+                .text('Correct, but no point (Total: ' + score + ')');
+            }
+
+            whiteStep++;
+          }
+
+          updateStatus();
+
+          // Auto‑play Black
+          if (game.turn() === 'b' && blackStep < blackReplies.length) {
+            setTimeout(function() {
+              game.move(blackReplies[blackStep]);
+              blackStep++;
+              board.position(game.fen(), false);
+              updateStatus();
+            }, 800);
+          }
+        },
+
+        onSnapEnd: function() {
+          board.position(game.fen(), false);
+        }
+      });
+
+      function updateStatus() {
+        var status;
+        if (game.in_checkmate()) {
+          status = 'Checkmate! ' + (game.turn() === 'w' ? 'Black' : 'White') + ' wins.';
+        } else if (game.in_draw()) {
+          status = 'Draw.';
+        } else {
+          status = (game.turn() === 'w' ? 'White' : 'Black') +
+                   ' to move' +
+                   (game.in_check() ? ' (in check)' : '');
+        }
+        $('#status').text(status);
+      }
+
+      updateStatus();
+    });
+  </script>
+</body>
+</html>

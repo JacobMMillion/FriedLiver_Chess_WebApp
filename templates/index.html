@@ -73,7 +73,7 @@
   <h2>Welcome to your guide to Fried Liver + Traxler Counter Attack</h2>
   <h3>Dashboard</h3>
 
-  <a class="card" href="fried_liver.html">
+  <a class="card" href="{{ url_for('fried_liver') }}">
     <div class="info">
       <div class="title">The Fried Liver attack</div>
       <div class="subtitle">0/3 Puzzles Completed</div>
@@ -82,7 +82,7 @@
     <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
   </a>
 
-  <a class="card" href="traxler_counter.html">
+  <a class="card" href="{{ url_for('traxler_counter') }}">
     <div class="info">
       <div class="title">The Traxler Counter Attack</div>
       <div class="subtitle">0/3 Puzzles Completed</div>
@@ -90,5 +90,18 @@
     </div>
     <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
   </a>
+
+  <br>
+
+  <a class="card" href="{{ url_for('liver_quiz') }}">
+    <div class="info">
+      <div class="title">Quiz: Apply Your Knowledge</div>
+      <div class="subtitle">Practice the full Fried Liver Attack and its counterplay</div>
+      <div class="subtitle">Highest Score: 0/20</div>
+      <progress value="0" max="3"></progress>
+    </div>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
+  </a>
+
 </body>
 </html>
