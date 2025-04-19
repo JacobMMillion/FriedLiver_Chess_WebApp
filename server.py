@@ -27,5 +27,10 @@ def traxler_counter():
 def liver_quiz():
     return render_template('liver_quiz.html')
 
+# 5) Quiz
+@app.route('/traxler_quiz')
+def traxler_quiz():
+    return render_template('traxler_quiz.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

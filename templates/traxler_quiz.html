@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Quiz: Fried‑Liver Trap</title>
+  <title>Quiz: Traxler Defense Drill</title>
 
   <!-- jQuery -->
   <script
@@ -31,26 +31,13 @@
     #board { width: 400px; margin: 20px auto; }
     #status { margin-top: 10px; font-weight: bold; }
     #feedback { margin-top: 10px; font-weight: bold; height: 1.2em; }
-    #continue-btn {
-      background: green;
-      color: white;
-      padding: 0.5em 1em;
-      border: none;
-      border-radius: 4px;
-      margin-top: 10px;
-    }
-    #continue-btn.enabled {
-      background: green;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body>
-  <h1>Quiz: Fried‑Liver Attack</h1>
+  <h1>Quiz: Traxler Defense Drill</h1>
   <div id="board"></div>
   <div id="status">Loading…</div>
   <div id="feedback"></div>
-  <button id="continue-btn" enabled>Continue to Traxler Quiz</button>
 
   <script>
     $(function() {
@@ -61,17 +48,15 @@
 
       var game = new Chess();
 
-      // Expected White moves
-      var whiteSequence = ['e4', 'Nf3', 'Bc4', 'Ng5', 'exd5', 'Nxf7', 'Bxd5+'];
+      // Computer (White) sequence: Fried‑Liver Attack
+      var whiteSeq = ['e4', 'Nf3', 'Bc4', 'Ng5'];
       var whiteStep = 0;
 
-      // Track if a given step has already had a wrong attempt
-      var wrongAttempted = new Array(whiteSequence.length).fill(false);
-
-      // Black auto‑replies
-      var blackReplies = ['e5', 'Nc6', 'Nf6', 'd5', 'Nxd5', 'Kxf7'];
+      // Expected Black moves: Traxler Defense
+      var blackSeq = ['e5', 'Nc6', 'Nf6', 'Bc5'];
       var blackStep = 0;
 
+      var wrongAttempted = new Array(blackSeq.length).fill(false);
       var score = 0;
       var $feedback = $('#feedback');
 
@@ -81,55 +66,44 @@
         pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
 
         onDragStart: function(source, piece) {
+          // Only Black to move and dragging Black pieces
           return !game.game_over() &&
-                 game.turn() === 'w' &&
-                 piece.charAt(0) === 'w';
+                 game.turn() === 'b' &&
+                 piece.charAt(0) === 'b';
         },
 
         onDrop: function(source, target) {
           var move = game.move({ from: source, to: target, promotion: 'q' });
           if (!move) return 'snapback';
 
-          // *** DEBUGGING ***
-          console.log('🔍 move.san:', move.san);
-          console.log('🔍 expected:', whiteSequence[whiteStep]);
-
-          // Only handle White’s moves here
-          if (move.color === 'w') {
-            var expected = whiteSequence[whiteStep];
-
-            // If wrong, mark that step dirty and snap back
-            if (move.san !== expected) {
-              wrongAttempted[whiteStep] = true;
-              $feedback.css('color', 'red').text('Not quite.');
-              game.undo();
-              board.position(game.fen(), false);
-              return;
-            }
-
-            // If correct and never wrong before, award point
-            var gained = !wrongAttempted[whiteStep];
-            if (gained) {
-              score++;
-              $feedback
-                .css('color', 'green')
-                .text('Good job! +1 point (Total: ' + score + ')');
-            } else {
-              $feedback
-                .css('color', 'orange')
-                .text('Correct, but no point (Total: ' + score + ')');
-            }
-
-            whiteStep++;
+          // Enforce Black's expected move
+          var expected = blackSeq[blackStep];
+          if (move.san !== expected) {
+            wrongAttempted[blackStep] = true;
+            $feedback.css('color', 'red').text('Not quite.');
+            game.undo();
+            board.position(game.fen(), false);
+            return;
           }
 
+          // Correct Black move
+          var gained = !wrongAttempted[blackStep];
+          if (gained) {
+            score++;
+            $feedback.css('color', 'green')
+              .text('Good job! +1 point (Total: ' + score + ')');
+          } else {
+            $feedback.css('color', 'orange')
+              .text('Correct, but no point (Total: ' + score + ')');
+          }
+          blackStep++;
           updateStatus();
 
-          // Auto‑play Black
-          if (game.turn() === 'b' && blackStep < blackReplies.length) {
+          // Auto‑play next White move
+          if (whiteStep < whiteSeq.length) {
             setTimeout(function() {
-              game.move(blackReplies[blackStep]);
-              blackStep++;
+              game.move(whiteSeq[whiteStep]);
+              whiteStep++;
               board.position(game.fen(), false);
               updateStatus();
             }, 800);
@@ -148,20 +122,19 @@
         } else if (game.in_draw()) {
           status = 'Draw.';
         } else {
-          status = (game.turn() === 'w' ? 'White' : 'Black') +
-                   ' to move' +
-                   (game.in_check() ? ' (in check)' : '');
+          status = (game.turn() === 'w' ? 'White' : 'Black') + ' to move'
+                 + (game.in_check() ? ' (in check)' : '');
         }
         $('#status').text(status);
       }
 
-      updateStatus();
-
-      // wire up the click to go to your next quiz
-      $('#continue-btn').on('click', function() {
-        window.location.href = "{{ url_for('traxler_quiz') }}";
-      });
-
+      // Kick off with White's first move
+      setTimeout(function() {
+        game.move(whiteSeq[whiteStep]);
+        whiteStep++;
+        board.position(game.fen(), false);
+        updateStatus();
+      }, 800);
     });
   </script>
 </body>
