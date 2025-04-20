@@ -32,7 +32,7 @@
     #status { margin-top: 10px; font-weight: bold; }
     #feedback { margin-top: 10px; font-weight: bold; height: 1.2em; }
     #continue-btn {
-      background: green;
+      background: rgb(149, 149, 149);
       color: white;
       padding: 0.5em 1em;
       border: none;
@@ -50,7 +50,7 @@
   <div id="board"></div>
   <div id="status">Loading…</div>
   <div id="feedback"></div>
-  <button id="continue-btn" enabled>Continue to Traxler Quiz</button>
+  <button id="continue-btn" disabled>Continue to Traxler Quiz</button>
 
   <script>
     $(function() {
@@ -121,6 +121,16 @@
             }
 
             whiteStep++;
+
+            // if we’ve just completed all required white moves:
+            if (whiteStep >= whiteSequence.length) {
+              // TODO: persist the score on the server here
+
+              // 2) enable the Continue button
+              $('#continue-btn')
+                .prop('disabled', false)
+                .addClass('enabled');
+            }
           }
 
           updateStatus();

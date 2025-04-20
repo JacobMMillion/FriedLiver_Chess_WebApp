@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Quiz: Traxler Defense Drill</title>
+  <title>Quiz: Traxler Defense</title>
 
   <!-- jQuery -->
   <script
@@ -31,13 +31,27 @@
     #board { width: 400px; margin: 20px auto; }
     #status { margin-top: 10px; font-weight: bold; }
     #feedback { margin-top: 10px; font-weight: bold; height: 1.2em; }
+
+    #finish-btn {
+    background: grey;
+    color: white;
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 4px;
+    margin-top: 10px;
+    }
+    #finish-btn.enabled {
+    background: green;
+    cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <h1>Quiz: Traxler Defense Drill</h1>
+  <h1>Quiz: Traxler Defense</h1>
   <div id="board"></div>
   <div id="status">Loading…</div>
   <div id="feedback"></div>
+  <button id="finish-btn" disabled>Finish Quiz</button>
 
   <script>
     $(function() {
@@ -49,11 +63,11 @@
       var game = new Chess();
 
       // Computer (White) sequence: Fried‑Liver Attack
-      var whiteSeq = ['e4', 'Nf3', 'Bc4', 'Ng5'];
+      var whiteSeq = ['e4', 'Nf3', 'Bc4', 'Ng5', 'Nxf7', 'Kxf2', 'Ke3'];
       var whiteStep = 0;
 
       // Expected Black moves: Traxler Defense
-      var blackSeq = ['e5', 'Nc6', 'Nf6', 'Bc5'];
+      var blackSeq = ['e5', 'Nc6', 'Nf6', 'Bc5', 'Bxf2+', 'Nxe4+', 'Qh4'];
       var blackStep = 0;
 
       var wrongAttempted = new Array(blackSeq.length).fill(false);
@@ -76,6 +90,10 @@
           var move = game.move({ from: source, to: target, promotion: 'q' });
           if (!move) return 'snapback';
 
+          // *** DEBUGGING ***
+          console.log('🔍 move.san:', move.san);
+          console.log('🔍 expected:', blackSeq[blackStep]);
+
           // Enforce Black's expected move
           var expected = blackSeq[blackStep];
           if (move.san !== expected) {
@@ -97,6 +115,16 @@
               .text('Correct, but no point (Total: ' + score + ')');
           }
           blackStep++;
+          if (blackStep >= blackSeq.length) {
+            // 1) store this quiz’s score
+            localStorage.setItem('traxler_score', score);
+
+            // 2) enable the Finish button
+            $('#finish-btn')
+                .prop('disabled', false)
+                .addClass('enabled');
+          }
+
           updateStatus();
 
           // Auto‑play next White move
@@ -135,6 +163,14 @@
         board.position(game.fen(), false);
         updateStatus();
       }, 800);
+
+
+      // bind Finish button
+      $('#finish-btn').on('click', function() {
+
+              window.location.href = "{{ url_for('index') }}";
+      });
+
     });
   </script>
 </body>
