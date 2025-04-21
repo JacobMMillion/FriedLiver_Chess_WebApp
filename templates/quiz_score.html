@@ -1,0 +1,51 @@
+{% extends "navbar.html" %}
+
+{% block title %}Quiz Score{% endblock %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <div class="card shadow-sm text-center">
+          <div class="card-body">
+            <!-- Chess icon -->
+            <i class="fas fa-chess fa-3x mb-3"></i>
+            
+            <!-- Header -->
+            <h5 class="card-title">Your Score</h5>
+            
+            <!-- Big numeric score -->
+            <p class="display-4 mb-3">
+              {{ score }} <small class="text-muted">/ {{ max_score }}</small>
+            </p>
+            
+            <!-- Progress bar -->
+            <div class="progress" style="height: 1.5rem;">
+              <div
+                class="progress-bar"
+                role="progressbar"
+                style="width: {{ (score / max_score * 100) | round(0) }}%;"
+                aria-valuenow="{{ score }}"
+                aria-valuemin="0"
+                aria-valuemax="{{ max_score }}"
+              >
+                {{ (score / max_score * 100) | round(0) }}%
+              </div>
+            </div>
+
+            <!-- Home button -->
+            <div class="mt-4">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="window.location.href='{{ url_for('index') }}';"
+              >
+                <i class="fas fa-home me-1"></i> Home
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

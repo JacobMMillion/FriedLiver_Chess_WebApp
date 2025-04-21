@@ -34,10 +34,18 @@
       <div class="info">
         <div class="title">Quiz: Apply Your Knowledge</div>
         <div class="subtitle">Practice the full Fried Liver Attack and its counterplay</div>
-        <div class="subtitle">Highest Score: 0/20</div>
-        <progress value="0" max="3"></progress>
+        <div class="subtitle">
+          Highest Score: {{ score | default(0) }} / {{ max_score | default(0) }}
+        </div>
+        <progress
+          value="{{ score | default(0) }}"
+          max="{{ max_score | default(0) }}"
+        ></progress>
       </div>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg"
+        alt="White pawn"
+      >
     </a>
   </div>
 
