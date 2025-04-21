@@ -1,107 +1,55 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Landing Page/Start</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 20px;
-      color: #333;
-    }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.25em;
-    }
-    h2 {
-      font-size: 1.5rem;
-      font-weight: normal;
-      color: #666;
-      margin-top: 0;
-      margin-bottom: 1em;
-    }
-    h3 {
-      font-size: 1.25rem;
-      margin: 2em 0 1em;
-      color: #555;
-    }
-    .card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 600px;
-      margin: 0.75em auto;
-      padding: 1em;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.2s, box-shadow 0.2s;
-    }
-    .card:hover {
-      background: #f9f9f9;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .card .info {
-      text-align: left;
-      flex: 1;
-    }
-    .card .info .title {
-      font-size: 1.2rem;
-      margin-bottom: 0.25em;
-    }
-    .card .info .subtitle {
-      font-size: 1rem;
-      margin-bottom: 0.5em;
-      color: #555;
-    }
-    .card .info progress {
-      width: 100%;
-      height: 1em;
-    }
-    .card img {
-      width: 80px;
-      height: auto;
-      margin-left: 1em;
-      border-radius: 4px;
-    }
-  </style>
-</head>
-<body>
+{% extends "navbar.html" %}
+
+{% block content %}
+  <title>{% block title %}Fried Liver and Traxler Counter ttack{% endblock %}</title>
   <h1>Landing Page/Start</h1>
   <h2>Welcome to your guide to Fried Liver + Traxler Counter Attack</h2>
-  <h3>Dashboard</h3>
+  <button id = "start-button">
+    Start
+  </button>
+  <div id = "main-content">
+    <h3>Dashboard</h3>
 
-  <a class="card" href="{{ url_for('fried_liver') }}">
-    <div class="info">
-      <div class="title">The Fried Liver attack</div>
-      <div class="subtitle">0/3 Puzzles Completed</div>
-      <progress value="0" max="3"></progress>
-    </div>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
-  </a>
+    <a class="card" href="{{ url_for('fried_liver') }}">
+      <div class="info">
+        <div class="title">The Fried Liver attack</div>
+        <div class="subtitle">0/3 Puzzles Completed</div>
+        <progress value="0" max="3"></progress>
+      </div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
+    </a>
 
-  <a class="card" href="{{ url_for('traxler_counter') }}">
-    <div class="info">
-      <div class="title">The Traxler Counter Attack</div>
-      <div class="subtitle">0/3 Puzzles Completed</div>
-      <progress value="0" max="3"></progress>
-    </div>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
-  </a>
+    <a class="card" href="{{ url_for('traxler_counter') }}">
+      <div class="info">
+        <div class="title">The Traxler Counter Attack</div>
+        <div class="subtitle">0/3 Puzzles Completed</div>
+        <progress value="0" max="3"></progress>
+      </div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
+    </a>
 
-  <br>
+    <br>
 
-  <a class="card" href="{{ url_for('liver_quiz') }}">
-    <div class="info">
-      <div class="title">Quiz: Apply Your Knowledge</div>
-      <div class="subtitle">Practice the full Fried Liver Attack and its counterplay</div>
-      <div class="subtitle">Highest Score: 0/20</div>
-      <progress value="0" max="3"></progress>
-    </div>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
-  </a>
+    <a class="card" href="{{ url_for('liver_quiz') }}">
+      <div class="info">
+        <div class="title">Quiz: Apply Your Knowledge</div>
+        <div class="subtitle">Practice the full Fried Liver Attack and its counterplay</div>
+        <div class="subtitle">Highest Score: 0/20</div>
+        <progress value="0" max="3"></progress>
+      </div>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
+    </a>
+  </div>
 
-</body>
-</html>
+
+  <!-- toggle visibilty -->
+  <script> 
+    document.getElementById('start-button').addEventListener('click', function(){
+      document.getElementById('main-content').style.display = 'block';
+      this.style.display = 'none';
+    });
+  </script>
+  </body>
+  </html>
+
+{% endblock %}
