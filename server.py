@@ -6,12 +6,6 @@ import json
 score = 0
 max_score = 14
 
-liver_whiteSeq = ['e4','Nf3','Bc4','Ng5','exd5','Nxf7','Bxd5+']
-liver_blackSeq   = ['e5','Nc6','Nf6','d5','Nxd5','Kxf7']
-
-traxler_whiteSeq = ['e4', 'Nf3', 'Bc4', 'Ng5', 'Nxf7', 'Kxf2', 'Ke3']
-traxler_blackSeq = ['e5', 'Nc6', 'Nf6', 'Bc5', 'Bxf2+', 'Nxe4+', 'Qh4']
-
 app = Flask(__name__)
 app.secret_key = 'secret'
 
@@ -54,8 +48,8 @@ def liver_quiz():
     return render_template(
         'liver_quiz.html',
         score=score,
-        liver_whiteSeq=liver_whiteSeq,
-        liver_blackSeq=liver_blackSeq
+        liver_whiteSeq=ATTACKS["fried_liver"]["whiteSeq"],
+        liver_blackSeq=ATTACKS["fried_liver"]["blackSeq"]
     )
 
 # 5) Quiz
@@ -64,8 +58,8 @@ def traxler_quiz():
     return render_template(
         'traxler_quiz.html',
         score=score,
-        traxler_whiteSeq=traxler_whiteSeq,
-        traxler_blackSeq=traxler_blackSeq
+        traxler_whiteSeq=ATTACKS["traxler_counter"]["whiteSeq"],
+        traxler_blackSeq=ATTACKS["traxler_counter"]["blackSeq"]
     )
 
 @app.route('/quiz_score')
