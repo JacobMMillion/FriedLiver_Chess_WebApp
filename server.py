@@ -1,6 +1,13 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, session
+from datetime import datetime
+import json
 
 app = Flask(__name__)
+app.secret_key = 'secret'
+
+# load JSON
+with open('data/attacks.json') as f:
+    ATTACKS = json.load(f)
 
 # 1) Home / landing page
 @app.route('/')
@@ -15,12 +22,16 @@ def chessboard_testing():
 # 3) Fried Liver puzzles
 @app.route('/fried_liver')
 def fried_liver():
-    return render_template('fried_liver.html')
+    session['fried_liver'] = datetime.now().isoformat()
+    desc = ATTACKS['fried_liver']['description']
+    return render_template('fried_liver.html', description = desc)
 
 # 4) Traxler Counter Attack puzzles
 @app.route('/traxler_counter')
 def traxler_counter():
-    return render_template('traxler_counter.html')
+    session['traxler_counter'] = datetime.now().isoformat()
+    desc = ATTACKS['fried_liver']['description']
+    return render_template('traxler_counter.html', description = desc)
 
 # 5) Quiz
 @app.route('/liver_quiz')
@@ -34,3 +45,9 @@ def traxler_quiz():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+#stuff to consider
+# store quiz answers
+# use json to represent chess puzzle (5 on spec hw10)
+# do we have a quiz results page (6d on spec hw10)
+# make button to advance to next page (7)

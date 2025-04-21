@@ -1,40 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Chessboard + Legal‑Move Enforcement</title>
+  {% extends "navbar.html" %}
 
-  <!-- 1) jQuery -->
-  <script
-    src="https://code.jquery.com/jquery-3.6.0.min.js"
-    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-    crossorigin="anonymous">
-  </script>
-
-  <!-- 2) chess.js engine -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.12.1/chess.min.js"
-    integrity="sha512-rIescAjPgXHz3WaxrSjaOl5iZfvBVIehYe+EF+d+DAdFNgV10QBT8d5APBjcGFKES0iVUYjBilvpck7gOe7CLg=="
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer">
-  </script>
-
-  <!-- 3) chessboard.js CSS & JS -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.css"
-    crossorigin="anonymous" />
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard-1.0.0.min.js"
-    crossorigin="anonymous">
-  </script>
+  {% block content %}
+  <title>{% block title %}Chessboard + Legal‑Move Enforcement{% endblock %}</title>
 
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
-    #board { width: 400px; margin: 20px auto; touch-action: none; }
-    #status { margin-top: 10px; font-weight: bold; }
-  </style>
-</head>
+  #board { width: 400px; margin: 20px auto; touch-action: none; }
+  #status { margin-top: 10px; font-weight: bold; }
+    </style>
 <body>
   <h1>Chessboard + Legal‑Move Enforcement</h1>
   <div id="board"></div>
@@ -94,3 +66,5 @@
   </script>
 </body>
 </html>
+
+{% endblock %}
