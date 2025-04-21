@@ -37,8 +37,9 @@
       }
 
       var game = new Chess();
-      var whiteSequence = ['e4','Nf3','Bc4','Ng5','exd5','Nxf7','Bxd5+'];
-      var blackReplies   = ['e5','Nc6','Nf6','d5','Nxd5','Kxf7'];
+      // Load the sequences for the Fried Liver quiz
+      var whiteSequence = {{ liver_whiteSeq | tojson }};
+      var blackReplies = {{ liver_blackSeq | tojson }};
       var whiteStep = 0, blackStep = 0, score = 0;
       var wrongAttempted = Array(whiteSequence.length).fill(false);
       var board = Chessboard('board',{

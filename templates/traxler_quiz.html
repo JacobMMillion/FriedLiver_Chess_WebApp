@@ -38,9 +38,9 @@
       }
 
       var game = new Chess();
-
-      var whiteSeq = ['e4', 'Nf3', 'Bc4', 'Ng5', 'Nxf7', 'Kxf2', 'Ke3'];
-      var blackSeq = ['e5', 'Nc6', 'Nf6', 'Bc5', 'Bxf2+', 'Nxe4+', 'Qh4'];
+      // Load the sequences for the Traxler quiz
+      var whiteSeq = {{ traxler_whiteSeq | tojson }};
+      var blackSeq = {{ traxler_blackSeq | tojson }};
       var whiteStep = 0, blackStep = 0;
       var wrongAttempted = Array(blackSeq.length).fill(false);
 
