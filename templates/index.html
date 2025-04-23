@@ -1,9 +1,9 @@
 {% extends "navbar.html" %}
 
 {% block content %}
-  <title>{% block title %}Fried Liver and Traxler Counter ttack{% endblock %}</title>
-  <h1>Landing Page/Start</h1>
-  <h2>Welcome to your guide to Fried Liver + Traxler Counter Attack</h2>
+  <title>{% block title %}Fried Liver and Traxler Counter Attack{% endblock %}</title>
+  <h1>Mastering the Fried Liver Trap & Traxler Counterattack</h1>
+  <h2>Study, Practice & Test Your Skills in the Italian Opening—Attack and Defense</h2>
   <button id = "start-button">
     Start
   </button>
@@ -12,7 +12,7 @@
 
     <a class="card" href="{{ url_for('fried_liver') }}">
       <div class="info">
-        <div class="title">The Fried Liver attack</div>
+        <b><div class="title">Learn: The Fried Liver attack</div></b>
         <div class="subtitle">0/3 Puzzles Completed</div>
         <progress value="0" max="3"></progress>
       </div>
@@ -21,19 +21,19 @@
 
     <a class="card" href="{{ url_for('traxler_counter') }}">
       <div class="info">
-        <div class="title">The Traxler Counter Attack</div>
+        <b><div class="title">Learn: The Traxler Counter Attack</div></b>
         <div class="subtitle">0/3 Puzzles Completed</div>
         <progress value="0" max="3"></progress>
       </div>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg" alt="White pawn">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Chess_pdt45.svg" alt="Black pawn">
     </a>
 
     <br>
 
     <a class="card" href="{{ url_for('liver_quiz') }}">
       <div class="info">
-        <div class="title">Quiz: Apply Your Knowledge</div>
-        <div class="subtitle">Practice the full Fried Liver Attack and its counterplay</div>
+        <b><div class="title">Quiz: Apply Your Knowledge</div></b>
+        <div class="subtitle">Practice the full Fried Liver Attack and its counterplay</div>
         <div class="subtitle">
           Highest Score: {{ score | default(0) }} / {{ max_score | default(0) }}
         </div>
@@ -42,11 +42,32 @@
           max="{{ max_score | default(0) }}"
         ></progress>
       </div>
-      <img
-        src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg"
-        alt="White pawn"
-      >
-    </a>
+      <!-- split pawn: left half white, right half black, enlarged to 64×64 -->
+      <div style="position: relative; width: 64px; height: 64px;">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg"
+          alt="White pawn"
+          style="
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: auto;
+            clip-path: inset(0 50% 0 0);
+          "
+        >
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/c/c7/Chess_pdt45.svg"
+          alt="Black pawn"
+          style="
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: auto;
+            clip-path: inset(0 0 0 50%);
+          "
+        >
+      </div>
+    </a>    
+    
+
   </div>
 
 
