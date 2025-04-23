@@ -32,21 +32,22 @@
 
   <script>
     $(function() {
+      var quiz = {{ quiz_type | tojson }};
       if (typeof Chessboard === 'undefined' || typeof Chess === 'undefined') {
         $('#status').text('Error loading libraries.');
         return;
       }
 
-      var game = new Chess();
-      // Load the sequences for the Traxler quiz
-      var whiteSeq = {{ traxler_whiteSeq | tojson }};
-      var blackSeq = {{ traxler_blackSeq | tojson }};
-      var whiteStep = 0, blackStep = 0;
-      var wrongAttempted = Array(blackSeq.length).fill(false);
+      var game               = new Chess();
+      var whiteSeq           = {{ traxler_whiteSeq | tojson }};
+      var blackSeq           = {{ traxler_blackSeq | tojson }};
+      var whiteStep          = 0,
+          blackStep          = 0;
+      var wrongAttempted     = Array(blackSeq.length).fill(false);
+      var $feedback          = $('#feedback');
 
-      // ← always emits a number literal, never blank
-      var score = {{ score | default(0) | tojson }};
-      var $feedback = $('#feedback');
+      // Record the very first SAN the user tries at each black move:
+      var firstAttemptsTraxler = Array(blackSeq.length).fill(null);
 
       var board = Chessboard('board', {
         draggable: true,
@@ -63,6 +64,17 @@
           var mv = game.move({ from: src, to: tgt, promotion: 'q' });
           if (!mv) return 'snapback';
 
+          // Capture the first attempt and send it immediately:
+          if (firstAttemptsTraxler[blackStep] === null) {
+            firstAttemptsTraxler[blackStep] = mv.san;
+            $.ajax({
+              url: "{{ url_for('submit_move') }}",
+              method: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({ quiz: quiz, index: blackStep, san: mv.san })
+            });
+          }
+
           var expected = blackSeq[blackStep];
           if (mv.san !== expected) {
             wrongAttempted[blackStep] = true;
@@ -74,32 +86,21 @@
 
           var gained = !wrongAttempted[blackStep];
           if (gained) {
-            score++;
             $feedback.css('color', 'green')
-                     .text('Good job! +1 point (Total: ' + score + ')');
+                     .text('Good job! +1 point');
           } else {
             $feedback.css('color', 'orange')
-                     .text('Correct, but no point (Total: ' + score + ')');
+                     .text('Correct, but no point');
           }
           blackStep++;
 
           if (blackStep >= blackSeq.length) {
-            // persist updated score on the server
-            $.ajax({
-              url: "{{ url_for('submit_score') }}",
-              method: "POST",
-              contentType: "application/json",
-              data: JSON.stringify({ score: score }),
-              dataType: "json"
-            });
-
-            $('#finish-btn')
-              .prop('disabled', false)
-              .addClass('enabled');
+            $('#finish-btn').prop('disabled', false).addClass('enabled');
           }
 
           updateStatus();
 
+          // Auto‑reply with White’s next move
           if (whiteStep < whiteSeq.length) {
             setTimeout(function() {
               game.move(whiteSeq[whiteStep++]);
@@ -127,6 +128,7 @@
         $('#status').text(s);
       }
 
+      // Kick off with White’s first move
       setTimeout(function() {
         game.move(whiteSeq[whiteStep]);
         whiteStep++;

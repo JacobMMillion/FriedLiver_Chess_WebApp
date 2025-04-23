@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>{% block title %}Quiz: Fried‑Liver Trap{% endblock %}</title>
+  <title>{% block title %}Quiz: Fried-Liver Attack{% endblock %}</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/1.0.0/chess.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chessboard-js/1.0.0/chessboard.min.js"></script>
@@ -22,7 +22,7 @@
   </style>
 </head>
 <body>
-  <h1>Quiz: Fried‑Liver Attack</h1>
+  <h1>Quiz: Fried-Liver Attack</h1>
   <div id="board"></div>
   <div id="status">Loading…</div>
   <div id="feedback"></div>
@@ -31,27 +31,47 @@
 
   <script>
     $(function() {
+      var quiz = {{ quiz_type | tojson }};
       if (typeof Chessboard === 'undefined' || typeof Chess === 'undefined') {
         $('#status').text('Error loading libraries.');
         return;
       }
 
-      var game = new Chess();
-      // Load the sequences for the Fried Liver quiz
+      var game        = new Chess();
       var whiteSequence = {{ liver_whiteSeq | tojson }};
-      var blackReplies = {{ liver_blackSeq | tojson }};
-      var whiteStep = 0, blackStep = 0, score = 0;
+      var blackReplies  = {{ liver_blackSeq | tojson }};
+      var whiteStep   = 0, blackStep = 0
       var wrongAttempted = Array(whiteSequence.length).fill(false);
-      var board = Chessboard('board',{
+      // Record the very first SAN the user tries at each step:
+      var firstAttempts  = Array(whiteSequence.length).fill(null);
+
+      var board = Chessboard('board', {
         draggable: true,
         position: 'start',
         pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png',
-        onDragStart: function(src,piece) {
+
+        onDragStart: function(src, piece) {
           return !game.game_over() && game.turn()==='w' && piece[0]==='w';
         },
+
         onDrop: function(src, tgt) {
-          var mv = game.move({from:src,to:tgt,promotion:'q'});
+          var mv = game.move({from: src, to: tgt, promotion: 'q'});
           if (!mv) return 'snapback';
+
+          // As soon as white makes their first attempt on this move:
+          if (mv.color==='w' && firstAttempts[whiteStep] === null) {
+            firstAttempts[whiteStep] = mv.san;
+            $.ajax({
+              url: "{{ url_for('submit_move') }}",
+              method: "POST",
+              contentType: "application/json",
+              data: JSON.stringify({
+                quiz:  quiz,
+                index: whiteStep,
+                san:   mv.san
+              })
+            });
+          }
 
           var expected = whiteSequence[whiteStep];
           if (mv.color==='w') {
@@ -59,62 +79,55 @@
               wrongAttempted[whiteStep] = true;
               $('#feedback').css('color','red').text('Not quite.');
               game.undo();
-              board.position(game.fen(),false);
+              board.position(game.fen(), false);
               return;
             }
             // correct
-            if (!wrongAttempted[whiteStep]) { score++; }
             $('#feedback')
-              .css('color', wrongAttempted[whiteStep]? 'orange':'green')
+              .css('color', wrongAttempted[whiteStep] ? 'orange' : 'green')
               .text(
                 wrongAttempted[whiteStep]
-                ? 'Correct, no point (Total: '+score+')'
-                : 'Good job! +1 point (Total: '+score+')'
+                  ? 'Correct, but no point'
+                  : 'Good job! +1 point'
               );
             whiteStep++;
 
             if (whiteStep >= whiteSequence.length) {
-              // 1) send to server
-              $.ajax({
-                url: "{{ url_for('submit_score') }}",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ score: score }),
-              });
-              // 2) enable buttons
-              $('#continue-btn').prop('disabled',false).addClass('enabled');
-              $('#learn-btn').show();
+              $('#continue-btn').prop('disabled', false).addClass('enabled');
             }
           }
+
           updateStatus();
 
-          // black auto‑reply
+          // black auto-reply
           if (game.turn()==='b' && blackStep < blackReplies.length) {
             setTimeout(function(){
               game.move(blackReplies[blackStep++]);
-              board.position(game.fen(),false);
+              board.position(game.fen(), false);
               updateStatus();
             }, 800);
           }
         },
-        onSnapEnd: function(){ board.position(game.fen(),false); }
+
+        onSnapEnd: function() {
+          board.position(game.fen(), false);
+        }
       });
 
       function updateStatus() {
         var s;
         if (game.in_checkmate()) {
-          s = 'Checkmate! '+ (game.turn()==='w'?'Black':'White') +' wins.';
+          s = 'Checkmate! ' + (game.turn()==='w'?'Black':'White') + ' wins.';
         } else if (game.in_draw()) {
           s = 'Draw.';
         } else {
-          s = (game.turn()==='w'?'White':'Black')+' to move'
+          s = (game.turn()==='w'?'White':'Black') + ' to move'
             + (game.in_check()? ' (in check)':'');
         }
         $('#status').text(s);
       }
       updateStatus();
 
-      // navigation:
       $('#continue-btn').click(function(){
         window.location.href = "{{ url_for('traxler_quiz') }}";
       });

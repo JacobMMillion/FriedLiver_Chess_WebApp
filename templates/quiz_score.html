@@ -3,48 +3,42 @@
 {% block title %}Quiz Score{% endblock %}
 
 {% block content %}
-  <div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-6 col-lg-4">
-        <div class="card shadow-sm text-center">
-          <div class="card-body">
-            <!-- Chess icon -->
-            <i class="fas fa-chess fa-3x mb-3"></i>
-            
-            <!-- Header -->
-            <h5 class="card-title">Your Score</h5>
-            
-            <!-- Big numeric score -->
-            <p class="display-4 mb-3">
-              {{ score }} <small class="text-muted">/ {{ max_score }}</small>
-            </p>
-            
-            <!-- Progress bar -->
-            <div class="progress" style="height: 1.5rem;">
-              <div
-                class="progress-bar"
-                role="progressbar"
-                style="width: {{ (score / max_score * 100) | round(0) }}%;"
-                aria-valuenow="{{ score }}"
-                aria-valuemin="0"
-                aria-valuemax="{{ max_score }}"
-              >
-                {{ (score / max_score * 100) | round(0) }}%
-              </div>
-            </div>
+  <div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg" style="max-width: 24rem; width: 100%;">
+      <div class="card-body text-center py-5 px-4">
+        <!-- Chess icon -->
+        <i class="fas fa-chess fa-4x mb-4 text-primary"></i>
 
-            <!-- Home button -->
-            <div class="mt-4">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                onclick="window.location.href='{{ url_for('index') }}';"
-              >
-                <i class="fas fa-home me-1"></i> Home
-              </button>
-            </div>
+        <!-- Header -->
+        <h1 class="mb-3">Your Score</h1>
+
+        <!-- Big numeric score -->
+        <p class="display-2 fw-bold mb-4">
+          {{ score }} <small class="text-muted fs-3">/ {{ max_score }}</small>
+        </p>
+
+        <!-- Progress bar -->
+        <div class="progress mb-4" style="height: 1.75rem; border-radius: 1rem; overflow: hidden;">
+          <div
+            class="progress-bar bg-primary"
+            role="progressbar"
+            style="width: {{ (score / max_score * 100) | round(0) }}%;"
+            aria-valuenow="{{ score }}"
+            aria-valuemin="0"
+            aria-valuemax="{{ max_score }}"
+          >
+            {{ (score / max_score * 100) | round(0) }}%
           </div>
         </div>
+
+        <!-- Home button -->
+        <button
+          type="button"
+          class="btn btn-outline-primary btn-lg"
+          onclick="window.location.href='{{ url_for('index') }}';"
+        >
+          <i class="fas fa-home me-2"></i>Back to Home
+        </button>
       </div>
     </div>
   </div>

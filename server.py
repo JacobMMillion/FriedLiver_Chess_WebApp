@@ -13,15 +13,37 @@ app.secret_key = 'secret'
 with open('data/attacks.json') as f:
     ATTACKS = json.load(f)
 
+# Get the players score dynamically
+def get_score_and_max():
+    liver_seq   = ATTACKS["fried_liver"]["whiteSeq"]
+    traxler_seq = ATTACKS["traxler_counter"]["blackSeq"]
+
+    # max is just total moves
+    max_score = len(liver_seq) + len(traxler_seq)
+
+    # pull what the user actually tried
+    fm_liver   = session.get("first_moves_fried_liver", [])
+    fm_traxler = session.get("first_moves_traxler", [])
+
+    # count how many match the expected
+    score_liver = sum(
+        1 for i, exp in enumerate(liver_seq)
+        if i < len(fm_liver) and fm_liver[i] == exp
+    )
+    score_traxler = sum(
+        1 for i, exp in enumerate(traxler_seq)
+        if i < len(fm_traxler) and fm_traxler[i] == exp
+    )
+
+    return score_liver + score_traxler, max_score
+
 # 1) Home / landing page
 @app.route('/')
 def index():
-    # show current cumulative score
-    return render_template(
-      'index.html',
-      score=score,
-      max_score=max_score
-    )
+    score, max_score = get_score_and_max()
+    return render_template('index.html',
+                           score=score,
+                           max_score=max_score)
 
 # 2) TESTING PAGE FOR CHESSBOARD
 @app.route('/chessboard_testing')
@@ -42,21 +64,21 @@ def traxler_counter():
     desc = ATTACKS['traxler_counter']['description']
     return render_template('traxler_counter.html', description = desc)
 
-# 5) Quiz
 @app.route('/liver_quiz')
 def liver_quiz():
     return render_template(
         'liver_quiz.html',
+        quiz_type='fried_liver',
         score=score,
         liver_whiteSeq=ATTACKS["fried_liver"]["whiteSeq"],
         liver_blackSeq=ATTACKS["fried_liver"]["blackSeq"]
     )
 
-# 5) Quiz
 @app.route('/traxler_quiz')
 def traxler_quiz():
     return render_template(
         'traxler_quiz.html',
+        quiz_type='traxler',
         score=score,
         traxler_whiteSeq=ATTACKS["traxler_counter"]["whiteSeq"],
         traxler_blackSeq=ATTACKS["traxler_counter"]["blackSeq"]
@@ -64,18 +86,32 @@ def traxler_quiz():
 
 @app.route('/quiz_score')
 def quiz_score():
-    return render_template(
-      'quiz_score.html',
-      score=score,
-      max_score=max_score
-    )
+    score, max_score = get_score_and_max()
+    return render_template('quiz_score.html',
+                           score=score,
+                           max_score=max_score)
 
-@app.route('/submit_score', methods=['POST'])
-def submit_score():
+@app.route('/submit_move', methods=['POST'])
+def submit_move():
     data = request.get_json()
-    global score, max_score
-    score = data.get('score', 0)
-    # if you want, also bump max_score here—or handle elsewhere
+    quiz = data.get('quiz')
+    idx  = data.get('index')
+    san  = data.get('san')
+
+    key = f"first_moves_{quiz}"
+    moves = session.get(key, [])
+
+    # grow list if needed
+    if len(moves) <= idx:
+        moves += [None] * (idx + 1 - len(moves))
+
+    moves[idx] = san
+    session[key] = moves
+
+    print("== submit_move ==")
+    print(" Fried Liver moves:", session.get('first_moves_fried_liver'))
+    print("      Traxler moves:", session.get('first_moves_traxler'))
+
     return jsonify(success=True)
 
 if __name__ == '__main__':
