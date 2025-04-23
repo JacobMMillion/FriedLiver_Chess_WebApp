@@ -1,8 +1,8 @@
 # Fried Liver and Traxler Defense Learning App
 
 <p align="center">
-  <img src="static/home_pic.png" alt="Learning Section Screenshot" width="550" />
-  <img src="static/quiz_pic.png" alt="Quiz Section Screenshot" width="550" />
+  <img src="static/home_pic.png" alt="Learning Section Screenshot" width="500" />
+  <img src="static/quiz_pic.png" alt="Quiz Section Screenshot" width="500" />
 </p>
 
 This is the Fried Liver and Traxler Defense Learning App, an interactive platform designed to help you both **learn** and **test** your skills in two of the most exciting chess openings:
