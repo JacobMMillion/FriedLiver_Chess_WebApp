@@ -1,0 +1,21 @@
+body {
+    background-color: #E9F6FB !important;
+    margin: 0;
+    font-family: Arial, sans-serif !important;
+  }
+
+  .card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 600px;
+    margin: 0.75em auto;
+    padding: 1em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    text-decoration: none;
+    color: inherit;
+    background-color: white; /* ← this makes the card white */
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  

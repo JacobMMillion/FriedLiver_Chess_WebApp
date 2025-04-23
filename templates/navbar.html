@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
   <meta charset="UTF-8" />
   <title>Fried Liver and Traxler Counterattack</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin: 20px;
       color: #333;
     }
     h1 {
@@ -69,12 +69,29 @@
 
     /* navbar styles */
     .navbar {
-        display: flex;
-        justify-content: center;
-        background: #333;
-        padding: 0.5em;
-        margin-bottom: 2em;
+      display: flex;
+      justify-content: space-between; /* Fix layout */
+      align-items: center;
+      background: #1B3C57;
+      padding: 1.5em 1.5em; /* Gives it breathing room */
+      margin-bottom: 2em;
     }
+    .navbar-home-link:hover {
+      background: none !important;  /* Removes hover effect */
+    }
+    .navbar-left span {
+      color: #fff;
+      font-size: 1rem;
+      font-weight: normal;
+      padding: 0.5em 1em;
+      margin-bottom: 0.5em;
+    }
+
+    .navbar-icon {
+      width: 40px;  /* Smaller icon */
+      height: 40px;
+    }
+
     .navbar a {
         color: #fff;
         text-decoration: none;
@@ -131,13 +148,20 @@
   </script>
 
 <body>
-    <nav class="navbar">
-        <a href="{{ url_for('index') }}">Home</a>
-        <a href="{{ url_for('fried_liver') }}">Fried Liver</a>
-        <a href="{{ url_for('traxler_counter') }}">Traxler Counterattack</a>
-        <a href="{{ url_for('liver_quiz') }}">Liver Quiz</a>
-        <a href="{{ url_for('traxler_quiz') }}">Traxler Quiz</a>
-    </nav>
+  <nav class="navbar">
+    <div class="navbar-left">
+      <a href="{{ url_for('index') }}" class="navbar-home-link">
+        <img src="https://img.icons8.com/ios-filled/50/ffffff/book.png" alt="Book Icon" class="navbar-icon">
+      </a>
+    </div>
+    <div class="navbar-links">
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('fried_liver') }}">Fried Liver</a>
+      <a href="{{ url_for('traxler_counter') }}">Traxler Counterattack</a>
+      <a href="{{ url_for('liver_quiz') }}">Liver Quiz</a>
+      <a href="{{ url_for('traxler_quiz') }}">Traxler Quiz</a>
+    </div>
+  </nav>
 
     <!-- basically most important line lmao -->
     <div class="container">
