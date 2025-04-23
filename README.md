@@ -1,6 +1,11 @@
 # Fried Liver and Traxler Defense Learning App
 
-Welcome to the Fried Liver and Traxler Defense Learning App, an interactive platform designed to help you both **learn** and **test** your skills in two of the most exciting chess openings:
+<p align="center">
+  <img src="static/home_pic.png" alt="Learning Section Screenshot" width="280" />
+  <img src="static/quiz_pic.png" alt="Quiz Section Screenshot" width="280" />
+</p>
+
+This is the Fried Liver and Traxler Defense Learning App, an interactive platform designed to help you both **learn** and **test** your skills in two of the most exciting chess openings:
 
 - **Fried Liver Attack**: Dive deep into this aggressive Italian Opening variation. In the **Learning** section you’ll find:
   - **Move-by-move explanations** with annotated diagrams
@@ -11,11 +16,6 @@ Welcome to the Fried Liver and Traxler Defense Learning App, an interactive plat
   - **Strategic plans** behind the counterattack
   - **Common traps** and how to avoid them
   - **Illustrated variations** for both sides
-
-<p align="center">
-  <img src="assets/home_pic.png" alt="Learning Section Screenshot" width="280" />
-  <img src="assets/quiz_pic.png" alt="Quiz Section Screenshot" width="280" />
-</p>
 
 ## Quiz Section
 
