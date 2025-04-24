@@ -40,27 +40,39 @@
     border-color: #a12a2a;
   }
   
-  /* Continue Button Styles
-     Styles for the "Continue" button */
+/* ─── continue-as-card-button ─────────────────── */
+/* hide until the quiz is done */
   #continue-btn {
     display: none;
-    padding: 1em 1.5em;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    margin-top: 40px;
-    background: linear-gradient(to bottom, #a5a5a5, #707070);
-    color: #fff;
   }
   
+  /* show + enable styling once you add .enabled */
   #continue-btn.enabled {
     display: inline-block;
-    background: linear-gradient(to bottom, #66bb6a, #388e3c);
     cursor: pointer;
   }
   
-  #continue-btn.enabled:hover {
-    background: linear-gradient(to bottom, #81c784, #4caf50);
+  /* your existing card-button look */
+  #continue-btn.card-button {
+    background-color: #FFA76D;
+    color: white;
+    padding: 1em 2em;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    margin-top: 40px;
+    transition: background-color 0.2s ease;
+  }
+  
+  /* hover effect */
+  #continue-btn.card-button:hover {
+    background-color: #f68c4c;
+  }
+  
+  /* (optional) active/press effect */
+  #continue-btn.card-button:active {
+    transform: translateY(2px);
   }
   
   /* Card Grid & Card Styles
