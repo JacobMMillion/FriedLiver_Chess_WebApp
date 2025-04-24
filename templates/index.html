@@ -2,7 +2,8 @@
 
 {% block content %}
 <h1>Master the Fried Liver & Traxler</h1>
-<h2>Study. Practice. Test Your Italian Opening Skills.</h2>
+<i><h2>Study. Practice. Test Your Italian Opening Skills.</h2></i>
+<br>
 
 <div class="card-grid">
 
@@ -45,6 +46,7 @@
 
 </div>
 
+<br>
 <p class="quiz-score">Last Quiz Score: {{ score | default(0) }} / {{ max_score | default(0) }}</p>
 
 {% endblock %}
