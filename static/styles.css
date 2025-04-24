@@ -1,9 +1,70 @@
-body {
+/* Base Styles
+   Global page resets and font settings */
+   body {
     background-color: #E9F6FB !important;
     margin: 0;
     font-family: Arial, sans-serif !important;
   }
-
+  
+  /* Feedback Box Styles
+     Styles for the interactive feedback message box */
+  #feedback {
+    display: flex;
+    width: fit-content;
+    margin: 10px auto;
+    justify-content: center;
+    align-items: center;
+    padding: .75em 1em;
+    min-height: 1.2em;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-weight: bold;
+    gap: .5em;
+  }
+  
+  #feedback.neutral {
+    background: #f0f0f0;
+    color: #333;
+    border-color: #ccc;
+  }
+  
+  #feedback.success {
+    background: #e0f8e9;
+    color: #2a662a;
+    border-color: #2a662a;
+  }
+  
+  #feedback.error {
+    background: #fde8e8;
+    color: #a12a2a;
+    border-color: #a12a2a;
+  }
+  
+  /* Continue Button Styles
+     Styles for the "Continue" button */
+  #continue-btn {
+    display: none;
+    padding: 1em 1.5em;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-top: 40px;
+    background: linear-gradient(to bottom, #a5a5a5, #707070);
+    color: #fff;
+  }
+  
+  #continue-btn.enabled {
+    display: inline-block;
+    background: linear-gradient(to bottom, #66bb6a, #388e3c);
+    cursor: pointer;
+  }
+  
+  #continue-btn.enabled:hover {
+    background: linear-gradient(to bottom, #81c784, #4caf50);
+  }
+  
+  /* Card Grid & Card Styles
+     Layout and appearance for card components */
   .card-grid {
     display: flex;
     justify-content: center;
@@ -54,15 +115,11 @@ body {
   }
   
   .card progress {
-    height: 8px !important; 
+    height: 8px !important;
     margin-top: 0.5em;
     margin-bottom: 1em;
-  
-    /* round the container */
     border-radius: 4px;
     overflow: hidden;
-  
-    /* reset default look */
     appearance: none;
     -webkit-appearance: none;
   }
@@ -81,9 +138,10 @@ body {
     background-color: #f68c4c;
   }
   
+  /* Quiz Score Styles
+     Presentation of quiz score information */
   .quiz-score {
     margin-top: 2em;
     font-size: 1em;
     color: #444;
-  }
-  
+  }  
