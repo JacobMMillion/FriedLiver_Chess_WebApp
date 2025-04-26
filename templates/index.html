@@ -10,21 +10,19 @@
   <div class="card">
     <img src="https://upload.wikimedia.org/wikipedia/commons/7/70/Chess_nlt45.svg" alt="Knight" class="card-icon">
     <div class="info">
-      <div class="title">Learn Attack</div>
-      <div class="subtitle">0 / 3 Steps Complete</div>
-      <progress value="0" max="3"></progress>
+      <br>
+      <div class="title">The Fried Liver Attack</div>
     </div>
-    <a href="{{ url_for('fried_liver') }}" class="card-button">Start</a>
+    <a href="{{ url_for('fried_liver') }}" class="card-button">Learn</a>
   </div>
 
   <div class="card">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Chess_bdt45.svg/1920px-Chess_bdt45.svg.png" alt="Bishop" class="card-icon">
     <div class="info">
-      <div class="title">Learn Defense</div>
-      <div class="subtitle">0 / 3 Steps Complete</div>
-      <progress value="0" max="3"></progress>
+      <br>
+      <div class="title">The Traxler Defense</div>
     </div>
-    <a href="{{ url_for('traxler_counter') }}" class="card-button">Start</a>
+    <a href="{{ url_for('traxler_counter') }}" class="card-button">Learn</a>
   </div>
 
   <div class="card">
@@ -41,7 +39,7 @@
       <div class="subtitle">{{ score | default(0) }} / {{ max_score | default(0) }}</div>
       <progress value="{{ score | default(0) }}" max="{{ max_score | default(0) }}"></progress>
     </div>
-    <a href="{{ url_for('liver_quiz') }}" class="card-button">Launch</a>
+    <a href="{{ url_for('liver_quiz') }}" class="card-button">Test Yourself</a>
   </div>
 
 </div>
