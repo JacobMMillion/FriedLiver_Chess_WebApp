@@ -50,19 +50,19 @@ def index():
 def chessboard_testing():
     return render_template('chessboard_testing.html')
 
-# 3) Fried Liver puzzles
+# 3) Fried Liver 
 @app.route('/fried_liver')
 def fried_liver():
     session['fried_liver'] = datetime.now().isoformat()
-    desc = ATTACKS['fried_liver']['description']
-    return render_template('fried_liver.html', description = desc)
+    fl = ATTACKS['fried_liver']
+    return render_template('learn.html', opening = fl, opening_name = 'The Fried Liver', quiz_endpoint = 'liver_quiz')
 
-# 4) Traxler Counter Attack puzzles
+# 4) Traxler Counter Attack 
 @app.route('/traxler_counter')
 def traxler_counter():
     session['traxler_counter'] = datetime.now().isoformat()
-    desc = ATTACKS['traxler_counter']['description']
-    return render_template('traxler_counter.html', description = desc)
+    tc = ATTACKS['traxler_counter']
+    return render_template('learn.html', opening = tc, opening_name = 'The Traxler', quiz_endpoint = 'traxler_quiz')
 
 @app.route('/liver_quiz')
 def liver_quiz():
@@ -116,9 +116,3 @@ def submit_move():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-#stuff to consider
-# store quiz answers
-# use json to represent chess puzzle (5 on spec hw10)
-# do we have a quiz results page (6d on spec hw10)
-# make button to advance to next page (7)
