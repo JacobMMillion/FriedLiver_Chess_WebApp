@@ -26,19 +26,6 @@
       margin: 2em 0 1em;
       color: #555;
     }
-    .card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      max-width: 600px;
-      margin: 0.75em auto;
-      padding: 1em;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      text-decoration: none;
-      color: inherit;
-      transition: background 0.2s, box-shadow 0.2s;
-    }
     .card:hover {
       background: #f9f9f9;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -74,7 +61,13 @@
       align-items: center;
       background: #1B3C57;
       padding: 1.5em 1.5em; /* Gives it breathing room */
-      margin-bottom: 2em;
+    }
+    .navbar-links {
+      /* if you want them to always stay on one line until forced, you can skip this */
+      flex: 1 1 100%;            
+      display: flex;             /* keep links in a row (or wrap themselves) */
+      flex-wrap: wrap;           /* allow individual links to wrap too */
+      justify-content: right;   /* center on the new line */
     }
     .navbar-home-link:hover {
       background: none !important;  /* Removes hover effect */
@@ -95,7 +88,7 @@
     .navbar a {
         color: #fff;
         text-decoration: none;
-        padding: 0.75em 1.5em;
+        padding: 0.75em 0.6em;
         margin: 0 0.5em;
         border-radius: 8px;
     }
@@ -154,7 +147,6 @@
       </a>
     </div>
     <div class="navbar-links">
-      <a href="{{ url_for('index') }}">Home</a>
       <a href="{{ url_for('fried_liver') }}">Fried Liver</a>
       <a href="{{ url_for('traxler_counter') }}">Traxler Counterattack</a>
       <a href="{{ url_for('liver_quiz') }}">Liver Quiz</a>

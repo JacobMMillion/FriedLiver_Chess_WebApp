@@ -1,0 +1,178 @@
+{% extends "navbar.html" %}
+
+{% block content %}
+<style>
+  .learn {
+    display: flex;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  .learn-text {
+    flex: 1;
+    margin-left: 1rem;
+    background: #f0fbfc;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+  .learn-text h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.3rem;
+    color: #1a3a5f;
+  }
+  .learn-text p {
+    margin: 0;
+    line-height: 1.6;
+    text-align: justify;
+    color: #333;
+  }
+  .learn-board {
+    flex: 1;
+    text-align: center;
+  }
+  #board {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    touch-action: none;
+  }
+  #controls {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  #controls button {
+    background: #FFA76D;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  #next_page {
+    margin-top: 2rem;
+    background: #FFA76D;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none;
+  }
+  #controls button:disabled {
+    background: #ccc;
+    cursor: default;
+  }
+
+  .opening-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-top: 2rem;
+  color: #1a3a5f;
+}
+
+</style>
+
+<h1 class ="opening-title"> {{ opening_name }} </h1>
+<div class="learn">
+  <div class="learn-text">
+    <h3 id="step-title">Step 1</h3>
+    <p id="desc">{{ opening.descriptions[0] }}</p>
+  </div>
+  <div class="learn-board">
+    <div id="board"></div>
+    <div id="controls">
+      <button id="prev" disabled>&larr;</button>
+      <button id="next">&rarr;</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function() {
+    // sanity check that both libs loaded
+    if (typeof Chessboard==='undefined' || typeof Chess==='undefined') {
+      console.error('Missing chessboard.js or chess.js');
+      return;
+    }
+  
+    var data  = {{ opening|tojson }},
+        texts = data.descriptions,
+        seqs  = data.moveSeqs,
+        theme = 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png';
+  
+    // create a chess.js game
+    var game = new Chess();
+  
+    // init board
+    var board = Chessboard('board', {
+      draggable: false,
+      position: 'start', // all pieces at start
+      pieceTheme: theme
+    });
+  
+    // step index
+    var idx = 0;
+  
+    function showStep(i) {
+      game.reset();
+      seqs[i].forEach(function(san) {
+        game.move(san);
+      });
+      board.position(game.fen());
+      $('#desc').text(texts[i]);
+      $('#step-title').text('Step ' + (i+1));
+      $('#prev').prop('disabled', i === 0);
+      $('#next').prop('disabled', i === texts.length - 1);
+      idx = i;
+      if (i === texts.length - 1) {
+        $('#next_page').show();
+      } else {
+        $('#next_page').hide();
+      }
+    }
+  
+    // animate the first sequence on load
+    function animateMoves(moves, i) {
+
+      if (i === 0) {
+        $('#prev, #next').prop('disabled', true);
+      }
+      if (i >= moves.length) {
+        // once animation is done, show step 0 properly:
+        showStep(0);
+        return;
+      }
+      if (i >= moves.length) {
+        $('#prev').prop('disabled', true);
+        $('#next').prop('disabled', false);
+        return;
+      }
+      game.move(moves[i]);
+      board.position(game.fen());
+      setTimeout(function() {
+        animateMoves(moves, i+1);
+      }, 950); // 950 ms edit to 100 if editing learning section
+    }
+  
+    // Prev / Next
+    $('#prev').click(function(){
+      if (idx > 0) showStep(idx-1);
+    });
+    $('#next').click(function(){
+      if (idx < texts.length-1) showStep(idx+1);
+    });
+  
+    // animate opening
+    animateMoves(seqs[0], 0);
+  });
+  </script>
+
+<button id = "next_page" onclick="window.location.href='{{ url_for(quiz_endpoint) }}'"> 
+  Continue to Quiz
+</button> 
+
+{% endblock %}
