@@ -30,3 +30,5 @@ Once you’re familiar with the theory, head to the **Quiz** section to **test y
 
 - **Jacob Million** (Primarily quiz section and backend)  
 - **Kevin Gutierrez** (Primarily learning section and frontend)
+
+Note: To run the site, simply run `python server.py` in the command line.
